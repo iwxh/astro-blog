@@ -5,7 +5,7 @@ export const SITE: Site = {
   author: "塔拉庄园",
   desc: "记录生活、思考与探索的个人博客。",
   title: "塔拉庄园",
-  ogImage: "astropaper-og.jpg",
+  ogImage: "taram-og.png",
   lightAndDarkMode: true,
   postPerPage: 3,
   scheduledPostMargin: 15 * 60 * 1000, // 15 minutes

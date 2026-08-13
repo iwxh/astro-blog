@@ -1,57 +1,51 @@
 ---
-import LinkButton from "./LinkButton.astro";
-
 export interface Props {
   currentPage: number;
   totalPages: number;
   prevUrl: string;
   nextUrl: string;
 }
-
 const { currentPage, totalPages, prevUrl, nextUrl } = Astro.props;
-
-const prev = currentPage > 1 ? "" : "disabled";
-const next = currentPage < totalPages ? "" : "disabled";
 ---
 
 {
   totalPages > 1 && (
-    <nav class="pagination-wrapper" aria-label="分页">
-      <LinkButton
-        disabled={prev === "disabled"}
-        href={prevUrl}
-        className={`mr-4 select-none ${prev}`}
-        ariaLabel="上一页"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" class={`${prev}-svg`}>
-          <path d="M12.707 17.293 8.414 13H18v-2H8.414l4.293-4.293-1.414-1.414L4.586 12l6.707 6.707z" />
-        </svg>
-        上一页
-      </LinkButton>
-      {currentPage} / {totalPages}
-      <LinkButton
-        disabled={next === "disabled"}
-        href={nextUrl}
-        className={`ml-4 select-none ${next}`}
-        ariaLabel="下一页"
-      >
-        下一页
-        <svg xmlns="http://www.w3.org/2000/svg" class={`${next}-svg`}>
-          <path d="m11.293 17.293 1.414 1.414L19.414 12l-6.707-6.707-1.414 1.414L15.586 11H6v2h9.586z" />
-        </svg>
-      </LinkButton>
+    <nav class="pagination-wrapper" aria-label="分页导航">
+      {currentPage > 1 ? (
+        <a href={prevUrl}>← 上一页</a>
+      ) : (
+        <span aria-disabled="true">← 上一页</span>
+      )}
+      <strong>
+        {currentPage} <i>/</i> {totalPages}
+      </strong>
+      {currentPage < totalPages ? (
+        <a href={nextUrl}>下一页 →</a>
+      ) : (
+        <span aria-disabled="true">下一页 →</span>
+      )}
     </nav>
   )
 }
 
 <style>
   .pagination-wrapper {
-    @apply mb-8 mt-auto flex justify-center;
+    @apply mx-auto mt-8 flex w-full max-w-6xl items-center justify-center gap-5 px-5 sm:px-8;
   }
-  .disabled {
-    @apply pointer-events-none select-none opacity-50 hover:text-skin-base group-hover:fill-skin-base;
+  .pagination-wrapper a,
+  .pagination-wrapper span {
+    @apply rounded-full border border-skin-line px-4 py-2 text-sm;
   }
-  .disabled-svg {
-    @apply group-hover:!fill-skin-base;
+  .pagination-wrapper a {
+    @apply hover:border-skin-accent hover:text-skin-accent;
+  }
+  .pagination-wrapper span {
+    @apply cursor-not-allowed opacity-35;
+  }
+  .pagination-wrapper strong {
+    @apply text-sm font-normal;
+  }
+  .pagination-wrapper i {
+    @apply mx-1 not-italic opacity-35;
   }
 </style>

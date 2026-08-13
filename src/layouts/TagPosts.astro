@@ -27,7 +27,7 @@ const { currentPage, totalPages, paginatedPosts, tag, tagName } = Astro.props;
     pageDesc={`所有带有“${tagName}”标签的文章。`}
   >
     <h1 slot="title" transition:name={tag}>{`标签：${tag}`}</h1>
-    <ul>
+    <ul class="grid gap-5 md:grid-cols-2">
       {
         paginatedPosts.map(({ data, slug }) => (
           <Card href={`/posts/${slug}/`} frontmatter={data} />

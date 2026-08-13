@@ -11,10 +11,11 @@ function withOpacity(variableName) {
 module.exports = {
   content: ["./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}"],
   theme: {
-    // Remove the following screen breakpoint or add other breakpoints
-    // if one breakpoint is not enough for you
     screens: {
       sm: "640px",
+      md: "768px",
+      lg: "1024px",
+      xl: "1280px",
     },
 
     extend: {
@@ -54,7 +55,9 @@ module.exports = {
         transparent: "transparent",
       },
       fontFamily: {
-        mono: ["IBM Plex Mono", "monospace"],
+        sans: ["Noto Sans SC", "PingFang SC", "Microsoft YaHei", "sans-serif"],
+        serif: ["Noto Serif SC", "Songti SC", "SimSun", "serif"],
+        mono: ["IBM Plex Mono", "SFMono-Regular", "monospace"],
       },
 
       typography: {

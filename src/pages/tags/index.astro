@@ -16,7 +16,7 @@ let tags = getUniqueTags(posts);
 <Layout title={`标签 | ${SITE.title}`}>
   <Header activeNav="tags" />
   <Main pageTitle="标签" pageDesc="浏览文章使用的全部标签。">
-    <ul>
+    <ul class="tag-list flex flex-wrap gap-3">
       {tags.map(({ tag }) => <Tag {tag} size="lg" />)}
     </ul>
   </Main>

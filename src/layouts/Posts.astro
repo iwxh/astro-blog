@@ -7,19 +7,17 @@ import Footer from "@components/Footer.astro";
 import Pagination from "@components/Pagination.astro";
 import Card from "@components/Card";
 import { SITE } from "@config";
-
 export interface Props {
   currentPage: number;
   totalPages: number;
   paginatedPosts: CollectionEntry<"blog">[];
 }
-
 const { currentPage, totalPages, paginatedPosts } = Astro.props;
 ---
 
 <Layout title={`文章 | ${SITE.title}`}>
   <Header activeNav="posts" />
-  <Main pageTitle="文章" pageDesc="塔拉庄园发布的全部文章。">
+  <Main pageTitle="文章" pageDesc="庄园里写下的生活见闻、思考与探索。">
     <ul>
       {
         paginatedPosts.map(({ data, slug }) => (
@@ -28,13 +26,11 @@ const { currentPage, totalPages, paginatedPosts } = Astro.props;
       }
     </ul>
   </Main>
-
   <Pagination
     {currentPage}
     {totalPages}
     prevUrl={`/posts${currentPage - 1 !== 1 ? "/" + (currentPage - 1) : ""}/`}
     nextUrl={`/posts/${currentPage + 1}/`}
   />
-
   <Footer noMarginTop={totalPages > 1} />
 </Layout>

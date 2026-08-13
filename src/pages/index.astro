@@ -3,148 +3,299 @@ import { getCollection } from "astro:content";
 import Layout from "@layouts/Layout.astro";
 import Header from "@components/Header.astro";
 import Footer from "@components/Footer.astro";
-import LinkButton from "@components/LinkButton.astro";
-import Hr from "@components/Hr.astro";
 import Card from "@components/Card";
-import Socials from "@components/Socials.astro";
 import getSortedPosts from "@utils/getSortedPosts";
-import { SOCIALS } from "@config";
 
-const posts = await getCollection("blog");
-
-const sortedPosts = getSortedPosts(posts);
-const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
-const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
-
-const socialCount = SOCIALS.filter(social => social.active).length;
+const sortedPosts = getSortedPosts(await getCollection("blog"));
+const [leadPost, ...remainingPosts] = sortedPosts;
 ---
 
 <Layout>
   <Header />
   <main id="main-content">
-    <section id="hero">
-      <h1>欢迎来到塔拉庄园</h1>
-      <a
-        target="_blank"
-        href="/rss.xml"
-        class="rss-link"
-        aria-label="RSS 订阅"
-        title="RSS 订阅"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" class="rss-icon"
-          ><path
-            d="M19 20.001C19 11.729 12.271 5 4 5v2c7.168 0 13 5.832 13 13.001h2z"
-          ></path><path
-            d="M12 20.001h2C14 14.486 9.514 10 4 10v2c4.411 0 8 3.589 8 8.001z"
-          ></path><circle cx="6" cy="18" r="2"></circle>
-        </svg>
-        <span class="sr-only">RSS 订阅</span>
-      </a>
-
-      <p>这里记录生活中的见闻、持续的思考，以及一路探索所得。</p>
-      <p>你可以从最新文章开始阅读，也可以通过标签或搜索找到感兴趣的内容。</p>
-      {
-        // only display if at least one social link is enabled
-        socialCount > 0 && (
-          <div class="social-wrapper">
-            <div class="social-links">关注我们：</div>
-            <Socials />
-          </div>
-        )
-      }
+    <section class="hero page-width">
+      <div class="hero-copy">
+        <span class="eyebrow">TARAM JOURNAL</span>
+        <h1>在日常里散步，<br /><em>在文字里安顿</em></h1>
+        <p>记录生活、思考与探索。愿每一次阅读，都像走进一座安静的庄园。</p>
+        <div class="hero-actions">
+          <a class="primary-button" href="/posts/"
+            >开始阅读 <span aria-hidden="true">→</span></a
+          >
+          <a class="secondary-button" href="/about/">认识庄园</a>
+        </div>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <div class="sun"></div>
+        <div class="hill hill-one"></div>
+        <div class="hill hill-two"></div>
+        <div class="manor">
+          <span class="roof"></span><span class="tower"></span><span
+            class="house"></span><span class="door"></span>
+        </div>
+        <span class="tree tree-one">♧</span><span class="tree tree-two">♧</span
+        ><span class="tree tree-three">♧</span>
+        <div class="path"></div>
+      </div>
+      <span class="botanical botanical-left" aria-hidden="true">❧</span>
+      <span class="botanical botanical-right" aria-hidden="true">❦</span>
     </section>
 
-    <Hr />
+    <section class="journal page-width">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">庄园手记</span><h2 class="section-title">
+            最新文章
+          </h2>
+        </div>
+        <a class="all-posts" href="/posts/"
+          >查看全部 <span aria-hidden="true">→</span></a
+        >
+      </div>
 
-    {
-      featuredPosts.length > 0 && (
-        <>
-          <section id="featured">
-            <h2>推荐文章</h2>
-            <ul>
-              {featuredPosts.map(({ data, slug }) => (
+      {
+        leadPost ? (
+          <div class="article-layout">
+            <Card
+              href={`/posts/${leadPost.slug}/`}
+              frontmatter={leadPost.data}
+              secHeading={false}
+              variant="featured"
+            />
+            <div class="side-notes">
+              {remainingPosts.slice(0, 2).map(({ data, slug }) => (
                 <Card
                   href={`/posts/${slug}/`}
                   frontmatter={data}
                   secHeading={false}
+                  variant="compact"
                 />
               ))}
-            </ul>
-          </section>
-          {recentPosts.length > 0 && <Hr />}
-        </>
-      )
-    }
+              {remainingPosts.length === 0 && (
+                <a class="note-card" href="/about/">
+                  <span aria-hidden="true">❦</span>
+                  <small>关于塔拉庄园</small>
+                  <strong>让文字慢下来，让生活留下来</strong>
+                  <p>这里会陆续长出新的故事、见闻与思考。</p>
+                </a>
+              )}
+            </div>
+          </div>
+        ) : (
+          <div class="empty-state paper-panel">
+            <>
+              <span aria-hidden="true">❦</span>
+              <h3>庄园正在等待第一篇故事</h3>
+              <p>从 Pages CMS 写下第一篇文章，它会自动出现在这里。</p>
+            </>
+          </div>
+        )
+      }
 
-    {
-      recentPosts.length > 0 && (
-        <section id="recent-posts">
-          <h2>最新文章</h2>
-          <ul>
-            {recentPosts.map(
-              ({ data, slug }, index) =>
-                index < 4 && (
-                  <Card
-                    href={`/posts/${slug}/`}
-                    frontmatter={data}
-                    secHeading={false}
-                  />
-                )
-            )}
+      {
+        remainingPosts.length > 2 && (
+          <ul class="more-posts">
+            {remainingPosts.slice(2, 5).map(({ data, slug }) => (
+              <Card
+                href={`/posts/${slug}/`}
+                frontmatter={data}
+                variant="compact"
+              />
+            ))}
           </ul>
-        </section>
-      )
-    }
+        )
+      }
+    </section>
 
-    <div class="all-posts-btn-wrapper">
-      <LinkButton href="/posts/">
-        查看全部文章
-        <svg xmlns="http://www.w3.org/2000/svg"
-          ><path
-            d="m11.293 17.293 1.414 1.414L19.414 12l-6.707-6.707-1.414 1.414L15.586 11H6v2h9.586z"
-          ></path>
-        </svg>
-      </LinkButton>
-    </div>
+    <section class="subscribe page-width">
+      <div class="subscribe-panel">
+        <div>
+          <span class="eyebrow">保持联系</span><h2 class="section-title">
+            偶尔来庄园走走
+          </h2><p>通过 RSS 订阅更新，不错过新写下的每一篇文章。</p>
+        </div>
+        <a class="primary-button" href="/rss.xml"
+          >订阅更新 <span aria-hidden="true">↗</span></a
+        >
+      </div>
+    </section>
   </main>
-
   <Footer />
 </Layout>
 
 <style>
-  /* ===== Hero Section ===== */
-  #hero {
-    @apply pb-6 pt-8;
+  .hero {
+    @apply relative mt-5 min-h-[35rem] overflow-hidden border border-skin-line bg-skin-card sm:mt-8;
+    border-radius: 1.75rem;
   }
-  #hero h1 {
-    @apply my-4 inline-block text-3xl font-bold sm:my-8 sm:text-5xl;
+  .hero-copy {
+    @apply relative z-10 max-w-2xl px-7 py-16 sm:px-14 sm:py-24 lg:py-28;
   }
-  #hero .rss-link {
-    @apply mb-6;
+  .hero h1 {
+    @apply font-serif text-4xl font-semibold leading-[1.4] tracking-[.08em] sm:text-6xl;
   }
-  #hero .rss-icon {
-    @apply mb-2 h-6 w-6 scale-110 fill-skin-accent sm:mb-3 sm:scale-125;
+  .hero h1 em {
+    @apply not-italic text-skin-accent;
   }
-  #hero p {
-    @apply my-2;
+  .hero-copy > p {
+    @apply mt-6 max-w-xl text-base leading-8 opacity-70 sm:text-lg;
   }
-  .social-wrapper {
-    @apply mt-4 flex flex-col sm:flex-row sm:items-center;
+  .hero-actions {
+    @apply mt-9 flex flex-wrap gap-3;
   }
-  .social-links {
-    @apply mb-1 mr-2 whitespace-nowrap sm:mb-0;
+  .hero-art {
+    @apply absolute inset-x-0 bottom-0 h-[48%] overflow-hidden opacity-90 sm:left-[43%] sm:top-0 sm:h-full;
   }
-
-  /* ===== Featured & Recent Posts Sections ===== */
-  #featured,
-  #recent-posts {
-    @apply pb-6 pt-12;
+  .sun {
+    @apply absolute right-[18%] top-[18%] h-20 w-20 rounded-full border;
+    border-color: rgba(var(--color-gold), 0.33);
   }
-  #featured h2,
-  #recent-posts h2 {
-    @apply text-2xl font-semibold tracking-wide;
+  .hill {
+    @apply absolute h-56 w-[38rem] rounded-[50%] border;
+    border-color: rgba(var(--color-sage), 0.45);
   }
-  .all-posts-btn-wrapper {
-    @apply my-8 text-center;
+  .hill-one {
+    @apply -bottom-32 -right-24 rotate-[-5deg];
+  }
+  .hill-two {
+    @apply -bottom-36 -left-20 rotate-[6deg];
+  }
+  .manor {
+    @apply absolute bottom-[21%] left-1/2 h-40 w-64 -translate-x-1/2;
+    color: rgba(var(--color-accent), 0.48);
+  }
+  .house,
+  .tower,
+  .roof,
+  .door {
+    @apply absolute block border;
+    border-color: currentColor;
+  }
+  .house {
+    @apply bottom-0 left-7 h-20 w-52;
+    background: rgba(var(--color-card), 0.52);
+  }
+  .tower {
+    @apply bottom-0 left-[6.3rem] h-32 w-16;
+    background: rgba(var(--color-card), 0.75);
+  }
+  .roof {
+    @apply bottom-[7.5rem] left-[5.25rem] h-14 w-24 rotate-45;
+    border-bottom: 0;
+    border-right: 0;
+    background: rgba(var(--color-card), 0.75);
+  }
+  .door {
+    @apply bottom-0 left-[7.55rem] h-10 w-6 rounded-t-full;
+  }
+  .tree {
+    @apply absolute bottom-[16%] font-serif text-6xl;
+    color: rgba(var(--color-accent), 0.38);
+  }
+  .tree-one {
+    @apply left-[14%];
+  }
+  .tree-two {
+    @apply right-[13%] text-7xl;
+  }
+  .tree-three {
+    @apply right-[28%] text-5xl;
+  }
+  .path {
+    @apply absolute -bottom-16 left-1/2 h-44 w-24 -translate-x-1/2 rotate-[-3deg] rounded-[50%] border-x;
+    border-color: rgba(var(--color-gold), 0.38);
+  }
+  .botanical {
+    @apply absolute font-serif text-7xl;
+    color: rgba(var(--color-sage), 0.32);
+  }
+  .botanical-left {
+    @apply -bottom-3 -left-2 rotate-[-24deg];
+  }
+  .botanical-right {
+    @apply -right-2 -top-4 rotate-[28deg];
+  }
+  .journal {
+    @apply py-20;
+  }
+  .section-heading {
+    @apply mb-8 flex items-end justify-between gap-5;
+  }
+  .all-posts {
+    @apply border-b border-skin-line pb-1 text-sm hover:border-skin-accent hover:text-skin-accent;
+  }
+  .article-layout {
+    @apply grid gap-5 lg:grid-cols-[1.55fr_.85fr];
+  }
+  .side-notes {
+    @apply grid gap-5;
+  }
+  .note-card {
+    @apply flex min-h-[12rem] flex-col justify-center overflow-hidden border border-skin-line bg-skin-card p-6 transition-all duration-300;
+    border-radius: 1.2rem;
+  }
+  .note-card > span {
+    @apply text-3xl;
+    color: rgb(var(--color-gold));
+  }
+  .note-card small {
+    @apply mt-3 text-xs tracking-[.18em] opacity-55;
+  }
+  .note-card strong {
+    @apply mt-2 font-serif text-lg font-semibold leading-8;
+  }
+  .note-card p {
+    @apply mt-2 text-sm leading-7 opacity-65;
+  }
+  .more-posts {
+    @apply mt-5 grid gap-5 md:grid-cols-3;
+  }
+  .empty-state {
+    @apply p-10 text-center;
+  }
+  .empty-state span {
+    @apply text-5xl;
+    color: rgb(var(--color-gold));
+  }
+  .empty-state h3 {
+    @apply mt-3 font-serif text-xl;
+  }
+  .empty-state p {
+    @apply mt-2 opacity-60;
+  }
+  .subscribe {
+    @apply pb-6;
+  }
+  .subscribe-panel {
+    @apply flex flex-col items-start justify-between gap-7 border border-skin-line bg-skin-card p-7 shadow-sm sm:flex-row sm:items-center sm:p-10;
+    border-radius: 1.35rem;
+    background: linear-gradient(
+      120deg,
+      rgba(var(--color-sage), 0.12),
+      rgba(var(--color-card), 1)
+    );
+  }
+  .subscribe-panel p {
+    @apply mt-3 opacity-65;
+  }
+  @media (max-width: 639px) {
+    .hero {
+      @apply min-h-[39rem];
+    }
+    .hero-copy {
+      @apply py-12;
+    }
+    .hero h1 {
+      @apply text-[2.15rem];
+    }
+    .hero-art {
+      @apply h-[43%];
+    }
+    .journal {
+      @apply py-14;
+    }
+    .all-posts {
+      @apply whitespace-nowrap;
+    }
   }
 </style>
