@@ -185,7 +185,11 @@
   }
 
   .article-card__link {
-    @apply block h-full p-5 sm:p-6;
+    @apply block h-full;
+  }
+
+  .article-card__content {
+    @apply p-5 sm:p-6;
   }
 
   .article-card__meta {
@@ -215,15 +219,19 @@
   }
 
   .article-card--featured {
-    @apply grid min-h-[19rem] sm:grid-cols-[0.9fr_1.1fr];
+    @apply min-h-[19rem];
   }
 
   .article-card--featured .article-card__link {
+    @apply grid sm:grid-cols-[0.9fr_1.1fr];
+  }
+
+  .article-card--featured .article-card__content {
     @apply flex flex-col justify-center p-7 sm:p-9;
   }
 
   .article-card__visual {
-    @apply relative hidden overflow-hidden border-r border-skin-line sm:block;
+    @apply relative aspect-[16/10] overflow-hidden border-b border-skin-line;
     background: linear-gradient(
         145deg,
         rgba(var(--color-sage), 0.2),
@@ -232,20 +240,32 @@
       rgb(var(--color-card-muted));
   }
 
-  .article-card__visual::before {
+  .article-card--featured .article-card__visual {
+    @apply sm:aspect-auto sm:border-b-0 sm:border-r;
+  }
+
+  .article-card__visual img {
+    @apply h-full w-full object-cover transition-transform duration-500;
+  }
+
+  .article-card:hover .article-card__visual img {
+    transform: scale(1.035);
+  }
+
+  .article-card__visual--placeholder::before {
     content: "❦";
     @apply absolute left-1/2 top-1/2 font-serif text-8xl;
     color: rgba(var(--color-accent), 0.32);
     transform: translate(-50%, -50%) rotate(-12deg);
   }
 
-  .article-card__visual::after {
+  .article-card__visual--placeholder::after {
     content: "";
     @apply absolute inset-6 rounded-[50%];
     border: 1px solid rgba(var(--color-gold), 0.42);
   }
 
-  .article-card--compact .article-card__link {
+  .article-card--compact .article-card__content {
     @apply p-5;
   }
 

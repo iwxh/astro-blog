@@ -60,6 +60,19 @@ const ogUrl = new URL(
       </div>
     </header>
 
+    {
+      ogImageUrl && (
+        <figure class="post-cover">
+          <img
+            src={ogImageUrl}
+            alt={`${title}的封面图`}
+            loading="eager"
+            decoding="async"
+          />
+        </figure>
+      )
+    }
+
     <article id="article" role="article" class="prose article-paper">
       <Content />
     </article>
@@ -110,6 +123,14 @@ const ogUrl = new URL(
   .post-meta > span {
     @apply border-l border-skin-line pl-4;
   }
+  .post-cover {
+    @apply mx-auto mb-8 aspect-[16/9] max-w-4xl overflow-hidden border border-skin-line bg-skin-card shadow-sm sm:mb-10;
+    border-radius: 1.35rem;
+    box-shadow: 0 18px 50px rgba(36, 48, 43, 0.08);
+  }
+  .post-cover img {
+    @apply h-full w-full object-cover;
+  }
   .article-paper {
     @apply mx-auto max-w-3xl border border-skin-line bg-skin-card px-6 py-9 shadow-sm sm:px-12 sm:py-12;
     border-radius: 1.35rem;
@@ -134,6 +155,9 @@ const ogUrl = new URL(
       @apply justify-start;
     }
     .article-paper {
+      @apply rounded-2xl;
+    }
+    .post-cover {
       @apply rounded-2xl;
     }
   }
