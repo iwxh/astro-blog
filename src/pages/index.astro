@@ -106,19 +106,6 @@ const [leadPost, ...remainingPosts] = sortedPosts;
         )
       }
     </section>
-
-    <section class="subscribe page-width">
-      <div class="subscribe-panel">
-        <div>
-          <span class="eyebrow">保持联系</span><h2 class="section-title">
-            偶尔来庄园走走
-          </h2><p>通过 RSS 订阅更新，不错过新写下的每一篇文章。</p>
-        </div>
-        <a class="primary-button" href="/rss.xml"
-          >订阅更新 <span aria-hidden="true">↗</span></a
-        >
-      </div>
-    </section>
   </main>
   <Footer />
 </Layout>
@@ -262,21 +249,6 @@ const [leadPost, ...remainingPosts] = sortedPosts;
   }
   .empty-state p {
     @apply mt-2 opacity-60;
-  }
-  .subscribe {
-    @apply pb-6;
-  }
-  .subscribe-panel {
-    @apply flex flex-col items-start justify-between gap-7 border border-skin-line bg-skin-card p-7 shadow-sm sm:flex-row sm:items-center sm:p-10;
-    border-radius: 1.35rem;
-    background: linear-gradient(
-      120deg,
-      rgba(var(--color-sage), 0.12),
-      rgba(var(--color-card), 1)
-    );
-  }
-  .subscribe-panel p {
-    @apply mt-3 opacity-65;
   }
   @media (max-width: 639px) {
     .hero {
