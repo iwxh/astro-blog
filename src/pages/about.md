@@ -1,36 +1,18 @@
 ---
 layout: ../layouts/AboutLayout.astro
-title: "About"
+title: "关于塔拉庄园"
 ---
 
-AstroPaper is a minimal, responsive and SEO-friendly Astro blog theme. I designed and crafted this based on [my personal blog](https://satnaing.dev/blog).
+塔拉庄园是一个用来记录生活、思考与探索的地方。
 
-This theme is aimed to be accessible out of the box. Light and dark mode are supported by
-default and additional color schemes can also be configured.
+这里会持续整理值得保存的见闻、经验和想法。内容不追求固定主题，希望每一篇文章都能留下真实、有用的记录。
 
-This theme is self-documented \_ which means articles/posts in this theme can also be considered as documentations. So, see the documentation for more info.
+你可以通过顶部的“文章”浏览全部内容，也可以使用“标签”和“搜索”快速找到感兴趣的文章。
 
-<div>
-  <img src="/assets/dev.svg" class="sm:w-1/2 mx-auto" alt="coding dev illustration">
-</div>
+## 内容更新
 
-## Tech Stack
+本站文章通过 Pages CMS 编辑和管理。文章保存后会自动提交到 GitHub，并由 Cloudflare Pages 完成构建和发布。
 
-This theme is written in vanilla JavaScript (+ TypeScript for type checking) and a little bit of ReactJS for some interactions. TailwindCSS is used for styling; and Markdown is used for blog contents.
+## 订阅
 
-## Features
-
-Here are certain features of this site.
-
-- fully responsive and accessible
-- SEO-friendly
-- light & dark mode
-- fuzzy search
-- super fast performance
-- draft posts
-- pagination
-- sitemap & rss feed
-- highly customizable
-
-If you like this theme, you can star/contribute to the [repo](https://github.com/satnaing/astro-paper).  
-Or you can even give any feedback via my [email](mailto:contact@satnaing.dev).
+如果你希望及时获得更新，可以使用本站提供的 [RSS 订阅](/rss.xml)。

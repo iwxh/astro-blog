@@ -1,30 +1,98 @@
 media:
   input: public
   output: /
+
 content:
   - name: posts
-    label: Posts
+    label: 文章管理
     type: collection
     path: src/content/blog
+    exclude:
+      - adding-new-post.md
+      - astro-paper-2.md
+      - astro-paper-3.md
+      - astro-paper-4.md
+      - customizing-astropaper-theme-color-schemes.md
+      - dynamic-og-images.md
+      - example-draft-post.md
+      - how-to-add-an-estimated-reading-time.md
+      - how-to-add-a-new-social-icon.md
+      - how-to-configure-astropaper-theme.md
+      - how-to-connect-astro-paper-blog-with-forestry-cms.md
+      - how-to-update-dependencies.md
+      - portfolio-website-development.md
+      - predefined-color-schemes.md
+      - setting-dates-via-git-hooks.md
+      - tailwind-typography.md
+      - terminal-development.md
     view:
-      fields: [ title, draft, pubDatetime ]
+      fields: [title, draft, pubDatetime]
+      primary: title
+      sort: [pubDatetime, title]
+      default:
+        sort: pubDatetime
+        order: desc
     fields:
-      - { name: author, label: Author, type: string }
-      - { name: pubDatetime, label: Date, type: date }
-      - { name: modDatetime, label: Date, type: date }
-      - { name: title, label: Title, type: string, required: true }
-      - { name: ogImage, label: Title, type: string }
-      - { name: slug, label: Slug, type: string }
-      - { name: featured, label: Featured, type: boolean }
-      - { name: draft, label: Draft, type: boolean }
-      - { name: tags, label: Tags, type: string, list: true }
-      - { name: description, label: Description, type: string }
-      - { name: body, label: Body, type: rich-text }
+      - name: author
+        label: 作者
+        type: string
+        description: 不填写时默认使用“塔拉庄园”。
+      - name: pubDatetime
+        label: 发布时间
+        type: date
+        required: true
+      - name: modDatetime
+        label: 最后修改时间
+        type: date
+        description: 首次发布时可以留空，修改文章后再填写。
+      - name: title
+        label: 文章标题
+        type: string
+        required: true
+      - name: ogImage
+        label: 封面图片路径
+        type: string
+        description: 可选，例如 /assets/example.jpg。
+      - name: slug
+        label: 文章地址标识
+        type: string
+        description: 可选，建议使用简短英文和连字符，例如 my-first-post。
+      - name: featured
+        label: 首页推荐
+        type: boolean
+      - name: draft
+        label: 保存为草稿
+        type: boolean
+      - name: tags
+        label: 标签
+        type: string
+        list: true
+        description: 可以填写多个标签，方便分类和检索。
+      - name: description
+        label: 文章摘要
+        type: text
+        required: true
+        description: 用一两句话介绍文章内容，会显示在文章列表和搜索结果中。
+      - name: body
+        label: 正文
+        type: rich-text
+        required: true
+
   - name: about
-    label: About page
+    label: 关于页面
     type: file
     path: src/pages/about.md
     fields:
-      - { name: layout, type: string, hidden: true, default: "../layouts/AboutLayout.astro" }
-      - { name: title, label: Title, type: string }
-      - { name: body, label: Body, type: rich-text, options: { input: public/assets, output: /assets } }
+      - name: layout
+        type: string
+        hidden: true
+        default: ../layouts/AboutLayout.astro
+      - name: title
+        label: 页面标题
+        type: string
+      - name: body
+        label: 页面内容
+        type: rich-text
+        options:
+          input: public/assets
+          output: /assets

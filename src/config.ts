@@ -2,9 +2,9 @@ import type { Site, SocialObjects } from "./types";
 
 export const SITE: Site = {
   website: "https://taram.cn/",
-  author: "Sat Naing",
-  desc: "A minimal, responsive and SEO-friendly Astro blog theme.",
-  title: "AstroPaper",
+  author: "塔拉庄园",
+  desc: "记录生活、思考与探索的个人博客。",
+  title: "塔拉庄园",
   ogImage: "astropaper-og.jpg",
   lightAndDarkMode: true,
   postPerPage: 3,
@@ -12,8 +12,8 @@ export const SITE: Site = {
 };
 
 export const LOCALE = {
-  lang: "en", // html lang code. Set this empty and default will be "en"
-  langTag: ["en-EN"], // BCP 47 Language Tags. Set this empty [] to use the environment default
+  lang: "zh-CN", // html lang code
+  langTag: ["zh-CN"], // BCP 47 Language Tags
 } as const;
 
 export const LOGO_IMAGE = {
@@ -28,25 +28,25 @@ export const SOCIALS: SocialObjects = [
     name: "Github",
     href: "https://github.com/satnaing/astro-paper",
     linkTitle: ` ${SITE.title} on Github`,
-    active: true,
+    active: false,
   },
   {
     name: "Facebook",
     href: "https://github.com/satnaing/astro-paper",
     linkTitle: `${SITE.title} on Facebook`,
-    active: true,
+    active: false,
   },
   {
     name: "Instagram",
     href: "https://github.com/satnaing/astro-paper",
     linkTitle: `${SITE.title} on Instagram`,
-    active: true,
+    active: false,
   },
   {
     name: "LinkedIn",
     href: "https://github.com/satnaing/astro-paper",
     linkTitle: `${SITE.title} on LinkedIn`,
-    active: true,
+    active: false,
   },
   {
     name: "Mail",
