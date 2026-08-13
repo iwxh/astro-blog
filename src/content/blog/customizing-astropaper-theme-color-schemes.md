@@ -23,7 +23,7 @@ AstroPaper theme will include light and dark mode by default. In other words, th
 ```js
 // file: src/config.ts
 export const SITE = {
-  website: "https://astro-paper.pages.dev/",
+  website: "https://taram.cn/",
   author: "Sat Naing",
   desc: "A minimal, responsive and SEO-friendly Astro blog theme.",
   title: "AstroPaper",
@@ -129,4 +129,4 @@ Here is an example of changing the light color scheme.
 }
 ```
 
-> Check out some [predefined color schemes](https://astro-paper.pages.dev/posts/predefined-color-schemes/) AstroPaper has already crafted for you.
+> Check out some [predefined color schemes](https://taram.cn/posts/predefined-color-schemes/) AstroPaper has already crafted for you.
