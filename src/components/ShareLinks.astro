@@ -1,66 +1,154 @@
 ---
-import LinkButton from "./LinkButton.astro";
-import socialIcons from "@assets/socialIcons";
+export interface Props {
+  title: string;
+  description?: string;
+}
 
-const URL = Astro.url;
+const { title, description = "来自塔拉庄园的文章" } = Astro.props;
+const articleURL = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin)
+  .href;
+const encodedURL = encodeURIComponent(articleURL);
+const encodedTitle = encodeURIComponent(`${title} - 塔拉庄园`);
+const encodedDescription = encodeURIComponent(description);
 
-const shareLinks = [
-  {
-    name: "WhatsApp",
-    href: "https://wa.me/?text=",
-    linkTitle: `通过 WhatsApp 分享文章`,
-  },
-  {
-    name: "Facebook",
-    href: "https://www.facebook.com/sharer.php?u=",
-    linkTitle: `分享到 Facebook`,
-  },
-  {
-    name: "Twitter",
-    href: "https://twitter.com/intent/tweet?url=",
-    linkTitle: `分享到 Twitter`,
-  },
-  {
-    name: "Telegram",
-    href: "https://t.me/share/url?url=",
-    linkTitle: `通过 Telegram 分享文章`,
-  },
-  {
-    name: "Pinterest",
-    href: "https://pinterest.com/pin/create/button/?url=",
-    linkTitle: `分享到 Pinterest`,
-  },
-  {
-    name: "Mail",
-    href: "mailto:?subject=See%20this%20post&body=",
-    linkTitle: `通过电子邮件分享文章`,
-  },
-] as const;
+const weiboURL = `https://service.weibo.com/share/share.php?url=${encodedURL}&title=${encodedTitle}`;
+const qqURL = `https://connect.qq.com/widget/shareqq/index.html?url=${encodedURL}&title=${encodedTitle}&summary=${encodedDescription}`;
 ---
 
-<div class={`social-icons`}>
-  <span class="italic">分享这篇文章：</span>
-  <div class="text-center">
-    {
-      shareLinks.map(social => (
-        <LinkButton
-          href={`${social.href + URL}`}
-          className="link-button"
-          title={social.linkTitle}
-        >
-          <Fragment set:html={socialIcons[social.name]} />
-          <span class="sr-only">{social.linkTitle}</span>
-        </LinkButton>
-      ))
-    }
+<div
+  class="share-area"
+  data-share-title={title}
+  data-share-text={description}
+  data-share-url={articleURL}
+>
+  <span class="share-label">分享文章</span>
+  <div class="share-buttons">
+    <a
+      class="share-button"
+      href={weiboURL}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="分享到微博"
+    >
+      <span class="share-mark weibo" aria-hidden="true">微</span>微博
+    </a>
+    <a
+      class="share-button"
+      href={qqURL}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="分享到 QQ"
+    >
+      <span class="share-mark qq" aria-hidden="true">Q</span>QQ
+    </a>
+    <button class="share-button native-share" type="button">
+      <span class="share-mark native" aria-hidden="true">↗</span>分享至应用
+    </button>
+    <button class="share-button copy-link" type="button">
+      <span class="share-mark copy" aria-hidden="true">链</span><span
+        class="copy-label">复制链接</span
+      >
+    </button>
   </div>
+  <p class="share-tip" aria-live="polite">
+    手机点击“分享至应用”，可选择微信、QQ、小红书或抖音等已安装应用。
+  </p>
 </div>
 
 <style>
-  .social-icons {
-    @apply flex flex-col flex-wrap items-center justify-center gap-1 sm:items-start;
+  .share-area {
+    @apply flex max-w-full flex-col gap-2;
   }
-  .link-button {
-    @apply scale-90 p-2 hover:rotate-6 sm:p-1;
+  .share-label {
+    @apply text-sm font-medium;
+  }
+  .share-buttons {
+    @apply flex flex-wrap gap-2;
+  }
+  .share-button {
+    @apply inline-flex min-h-10 items-center gap-1.5 rounded-full border border-skin-line bg-skin-card px-3 py-2 text-sm transition-all hover:-translate-y-0.5 hover:border-skin-accent hover:text-skin-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-skin-fill;
+  }
+  .share-mark {
+    @apply inline-flex h-5 w-5 items-center justify-center rounded-full text-[11px] font-semibold text-white;
+  }
+  .weibo {
+    background: #e34f41;
+  }
+  .qq {
+    background: #2c8fe5;
+  }
+  .native {
+    background: #1d7d5c;
+  }
+  .copy {
+    background: rgb(var(--color-gold));
+  }
+  .share-tip {
+    @apply max-w-xl text-xs leading-6 opacity-55;
+  }
+  @media (max-width: 639px) {
+    .share-area {
+      @apply w-full items-start;
+    }
+    .share-buttons {
+      @apply w-full;
+    }
   }
 </style>
+
+<script>
+  function setupArticleShare() {
+    document.querySelectorAll<HTMLElement>(".share-area").forEach(area => {
+      if (area.dataset.ready === "true") return;
+      area.dataset.ready = "true";
+
+      const title = area.dataset.shareTitle ?? document.title;
+      const text = area.dataset.shareText ?? "";
+      const url = area.dataset.shareUrl ?? window.location.href;
+      const tip = area.querySelector<HTMLElement>(".share-tip");
+      const copyButton = area.querySelector<HTMLButtonElement>(".copy-link");
+      const copyLabel = area.querySelector<HTMLElement>(".copy-label");
+      const nativeButton =
+        area.querySelector<HTMLButtonElement>(".native-share");
+
+      const copyURL = async (
+        message = "文章链接已复制，可以粘贴到微信、小红书或抖音。"
+      ) => {
+        try {
+          await navigator.clipboard.writeText(url);
+        } catch {
+          const input = document.createElement("textarea");
+          input.value = url;
+          input.style.position = "fixed";
+          input.style.opacity = "0";
+          document.body.appendChild(input);
+          input.select();
+          document.execCommand("copy");
+          input.remove();
+        }
+        if (copyLabel) copyLabel.textContent = "已复制";
+        if (tip) tip.textContent = message;
+        window.setTimeout(() => {
+          if (copyLabel) copyLabel.textContent = "复制链接";
+        }, 1800);
+      };
+
+      copyButton?.addEventListener("click", () => copyURL());
+      nativeButton?.addEventListener("click", async () => {
+        if (navigator.share) {
+          try {
+            await navigator.share({ title, text, url });
+          } catch (error) {
+            if (error instanceof DOMException && error.name === "AbortError")
+              return;
+          }
+        } else {
+          await copyURL("当前浏览器不支持应用分享，文章链接已自动复制。");
+        }
+      });
+    });
+  }
+
+  setupArticleShare();
+  document.addEventListener("astro:after-swap", setupArticleShare);
+</script>

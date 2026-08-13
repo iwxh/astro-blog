@@ -67,8 +67,9 @@ const ogUrl = new URL(
     <footer class="post-footer">
       <ul class="tag-list">{tags.map(tag => <Tag tag={slugifyStr(tag)} />)}</ul>
       <div class="post-actions">
-        <ShareLinks /><button id="back-to-top" class="secondary-button"
-          >返回顶部 ↑</button
+        <ShareLinks {title} {description} /><button
+          id="back-to-top"
+          class="secondary-button">返回顶部 ↑</button
         >
       </div>
     </footer>
